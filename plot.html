@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sine wave plot</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+        font-size: 1.07em;
+      }
+      body {
+        overflow: hidden;
+      }
+
+      canvas {
+        position: absolute;
+        z-index: -1;
+        background-color: black;
+      }
+
+      .sliders {
+        z-index: 1;
+        width: fit-content;
+        height: fit-content;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        background-color: black;
+        color: white;
+        border-radius: 15px;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        border: 3px solid white;
+      }
+
+      .title {
+        padding-bottom: 10px;
+        font-size:1.15em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <div class="sliders">
+      <p class="title">Control Panel</p>
+      <div class="one">
+        <label for="amplitude">Amplitude: </label>
+        <input
+          type="range"
+          name="amplitude"
+          id="amplitude"
+          min="0"
+          max="350"
+          value="100"
+        />
+      </div>
+      <div class="two">
+        <label for="waveLength">Wave Length: </label>
+        <input
+          type="range"
+          name="waveLength"
+          id="waveLength"
+          min="0"
+          max="500"
+          value="100"
+        />
+        <div class="three">
+        <label for="speed">Speed: </label>
+        <input
+          type="range"
+          name="speed"
+          id="speed"
+          min="0"
+          max="0.4"
+          value="0.1"
+          step="0.01"
+        />
+      </div>
+    </div>
+    <script>
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const amp = document.getElementById("amplitude");
+      const wave = document.getElementById("waveLength");
+      const speedElement = document.getElementById("speed");
+
+      ctx.beginPath();
+
+      amp.addEventListener("input", function () {
+        canvas.width = canvas.width;
+        amplitude = this.value;
+      });
+      wave.addEventListener("input", function () {
+        canvas.width = canvas.width;
+        waveLength = this.value;
+      });
+      speedElement.addEventListener("input", function () {
+        canvas.width = canvas.width;
+        increment = Number(this.value);
+      });
+
+      var amplitude = amp.value,
+        waveLength = wave.value,
+        speed = 0.1,
+        increment = 0.1;
+
+      function plot() {
+        canvas.width = canvas.width;
+        ctx.strokeStyle = "white";
+        for (let x = 0; x < canvas.width; x++) {
+          const yOffset = canvas.height / 2;
+          ctx.lineWidth = 5;
+          // Sine Wave below. format = sin(x / waveLength) * amplitude WHERE x = x value of current drawing pixel
+          ctx.lineTo(x, yOffset + Math.sin(x / waveLength + speed) * amplitude);
+        }
+        ctx.stroke();
+        speed += increment;
+        requestAnimationFrame(plot);
+      }
+      requestAnimationFrame(plot);
+    </script>
+  </body>
+</html>
